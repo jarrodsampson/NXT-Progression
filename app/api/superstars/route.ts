@@ -14,29 +14,79 @@ const searchItems = async (req: NextRequest) => {
   const limit = req.nextUrl.searchParams.get("limit");
   const offset = req.nextUrl.searchParams.get("offset");
   const search = req.nextUrl.searchParams.get("search");
+  const type = req.nextUrl.searchParams.get("type");
 
   try {
     let list: any = [];
     let total: Number = 0;
-    let where = {
-      name: {
-        contains: `${search}`,
-      },
-    };
 
     if (search) {
       list = await prisma.superstars.findMany({
         skip: Number(offset) || DEFAULT_OFFSET,
         take: Number(limit) || DEFAULT_LIMIT,
-        where,
+        where: {
+          name: {
+            contains: `${search}`,
+            mode: "insensitive",
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+        orderBy: {
+          name: "asc",
+        },
+        distinct: ["name"],
       });
       total = await prisma.superstars.count({
-        where,
+        where: {
+          name: {
+            contains: `${search}`,
+            mode: "insensitive",
+          },
+        },
+      });
+    } else if (type) {
+      list = await prisma.superstars.findMany({
+        skip: Number(offset) || DEFAULT_OFFSET,
+        take: Number(limit) || DEFAULT_LIMIT,
+        where: {
+          agent: {
+            equals: type,
+            mode: "insensitive",
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+        orderBy: {
+          name: "asc",
+        },
+      });
+      total = await prisma.superstars.count({
+        where: {
+          name: {
+            contains: `${search}`,
+            mode: "insensitive",
+          },
+        },
       });
     } else {
       list = await prisma.superstars.findMany({
         skip: Number(offset) || DEFAULT_OFFSET,
         take: Number(limit) || DEFAULT_LIMIT,
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+        orderBy: {
+          name: "asc",
+        },
       });
       total = await prisma.superstars.count();
     }

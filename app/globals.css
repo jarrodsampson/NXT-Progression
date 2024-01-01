@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap");
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -18,10 +22,27 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
     rgb(var(--background-start-rgb));
+}
+
+.active {
+  font-weight: bold;
+}
+
+.main-navigation {
+  letter-spacing: 1px;
+}
+
+.main-navigation a {
+  letter-spacing: 1px;
+  @apply font-open-sans;
+}
+
+.alternating-container .flex:nth-child(2n + 1) {
+  flex-direction: row-reverse;
+}
+
+.footer {
+  @apply font-open-sans;
 }
